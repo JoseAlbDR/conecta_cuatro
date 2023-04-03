@@ -43,7 +43,7 @@ class LinearBoard():
         """
         Si el tablero esta lleno
         """
-        # Si el elemento del final es distinto de None el tablero esta lleno
+        # Si el ultimo elemento no es None significa que la lista esta llena
         return self._column[-1] != None
        
     def is_victory(self, token):
@@ -52,6 +52,17 @@ class LinearBoard():
         """
         # Buscamos si hay una racha de token repetido VICTORY_STRIKE veces
         return find_streak(self._column, token, VICTORY_STRIKE)
+    
+        acum = 0
+        for n in range(BOARD_LENGTH):
+            if self._column[n] == token:
+                acum += 1
+                if acum == VICTORY_STRIKE:
+                    return True
+            else:
+                acum = 0
+
+        return False
 
     
     def is_tie(self):
