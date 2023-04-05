@@ -8,11 +8,20 @@ class LinearBoard():
     o otro jugador
     None un espacio vacio
     """
+    
+    @classmethod
+    def fromList(cls, list):
+        """
+        Transforma un linear board en una lista para poder trabajar con len()
+        """
+        linear_board = cls()
+        linear_board._column = list
+        return linear_board
+        
     def __init__(self):
         """
         Una lista de None
         """
-        self.length = BOARD_LENGTH
         self._column = [None for i in range(BOARD_LENGTH)]
         
     def add(self, token):
@@ -29,7 +38,6 @@ class LinearBoard():
             
     def add_to_full(self):
         return self.is_full()
-        
         
     def empty_board(self):
         """
@@ -53,7 +61,6 @@ class LinearBoard():
         # Buscamos si hay una racha de token repetido VICTORY_STRIKE veces
         return find_streak(self._column, token, VICTORY_STRIKE)
 
-    
     def is_tie(self):
         """
         Si hay un empate
@@ -62,12 +69,4 @@ class LinearBoard():
         if (not self.is_victory("x")) and (not self.is_victory("o")):
                 return True
             
-        
-b = LinearBoard()
-
-b.add("x")
-b.add("x")
-b.add("x")
-b.add("o")
-
-print(b.is_victory("x"))
+    #

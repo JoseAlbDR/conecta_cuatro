@@ -33,6 +33,91 @@ def test_find_streaks():
     assert find_streak([1, 2, 5, 5, 5, 5, 4], 5, 3)
     assert find_streak([1, 2, 3, 4, 5, 5, 5], 5, 4) == False
     
+
+def test_first_elements():
+    original = [[0, 7 , 3], 
+                [4,0,1]]
+    
+    vertical_start = [["x", None, None, None, None],
+                    ["x", None, None, None, None],
+                    ["x", "o", None, None, None],
+                    ["x", "o", None, None, None],
+                    ["x", "o", None, None, None]]
+    
+    assert first_elements(original) == [0, 4]
+    assert first_elements(vertical_start) == ["x", "x", "x", "x", "x"]
+    
+
+def test_any_element():
+    vertical_mid = [["x", "o", "x", None, None, ],
+                    ["o", "x", "x", None, None, ],
+                    ["x", "o", "x", "o", None, ],
+                    ["x", "o", "x", "x", None, ],
+                    ["o", "x", "o", None, None, ],]
+    
+    assert any_element(vertical_mid, 0) == ["x", "o", "x", "x", "o"]
+    assert any_element(vertical_mid, 1) == ["o", "x", "o", "o", "x"]
+    assert any_element(vertical_mid, 2) == ["x", "x", "x", "x", "o"]
+    assert any_element(vertical_mid, 3) == [None, None, "o", "x", None]
+    assert any_element(vertical_mid, 4) == [None, None, None, None, None]
+    
+def test_transpose():
+    original = [["x", "o", "x", None, None, ],
+                ["o", "x", "x", None, None, ],
+                ["x", "o", "x", "o", None, ],
+                ["x", "o", "x", "x", None, ],
+                ["o", "x", "o", None, None, ],]
+    
+    another = [[0, 7 , 3], 
+                [4,0,1]]
+    
+    assert transpose(original) == [["x", "o", "x", "x", "o", ],
+                                    ["o", "x", "o", "o", "x", ],
+                                    ["x", "x", "x", "x", "o", ],
+                                    [None, None, "o", "x", None, ],
+                                    [None, None, None, None, None, ],]
+    
+    assert transpose(another) == [[0, 4],
+                                  [7, 0],
+                                  [3, 1]]
+    assert transpose(transpose(original)) == original
+    assert transpose(transpose(another)) == another
+        
+def test_zero_distance_displace():
+    l1 = [1, 2, 3, 4, 5, 6]
+    l2 = [1]
+    l3 = [[4, 5]], ["x", "o", "c"]
+    
+    assert displace([], 0) == []
+    assert displace(l1, 0) == l1
+    assert displace(l2, 0) == l2
+    assert displace(l3, 0) == l3
+    
+def test_positive_distance_displace():
+    l1 = [1, 2, 3, 4, 5, 6]
+    l2 = [1]
+    l3 = [[4, 5], ["x", "o", "c"]]
+    l4 = [9, 6, 5]
+    
+    assert displace([], 2) == []
+    assert displace(l1, 2) == [None, None, 1, 2, 3, 4]
+    assert displace(l2, 3, "-") == ["-"]
+    assert displace(l3, 1, "#") == ["#", [4, 5]]
+    assert displace(l4, 3, 0) == [0, 0, 0]  
+    
+    
+def test_negative_distance_displace():
+    l1 = [1, 2, 3, 4, 5, 6]
+    l2 = [1]
+    l3 = [[4, 5], ["x", "o", "c"]]
+    l4 = [9, 6, 5]
+    
+    assert displace([], -2) == []
+    assert displace(l1, -2) == [3, 4, 5, 6, None, None]
+    assert displace(l2, -3, "-") == ["-"]
+    assert displace(l3, -1, "#") == [["x", "o", "c"], "#"]
+    assert displace(l4, -3, 0) == [0, 0, 0]    
+    
     
 
     
