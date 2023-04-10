@@ -15,10 +15,27 @@ class SquareBoard():
         board = cls()
         # Creamos una matriz de listas de todos los linear board de ._columns
         board._columns = list(map(lambda element: LinearBoard.fromList(element), list_of_lists))
+            
         return board
            
     def __init__(self):
         self._columns = [LinearBoard() for i in range(BOARD_LENGTH)]
+        
+        
+    def __repr__(self):
+        return f"{self.__class__}: {self._columns}"
+    
+    def __len__(self):
+        return len(self._columns)
+    
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        else:
+            return self._columns == other._columns
+
+    def __hash__(self):
+        return hash(self._columns)
 
     def is_full(self):
         """
@@ -37,8 +54,15 @@ class SquareBoard():
         Devuelve una representacion en formato de matriz, es decir, lista de listas
         """
         return list(map(lambda element: element._column, self._columns))
-        
-    # Detectar victorias
+
+    def add(self, char, column):
+        """
+        Añade char a la column elegida
+        """
+        self._columns[column].add(char)    
+
+
+    # Detectar victoriass
     def is_victory(self, char):
         """
         Detecta si hay una victoria en vertical, horizontal o vertical ascendente o descendente
@@ -88,7 +112,7 @@ class SquareBoard():
         # Averiguamos si tiene una victoria horizontal
         return temp._any_horizontal_victory(char)
             
-        
+
     # dunders
     def __repr__(self) -> str:
         return f"{self.__class__}:{self._columns}"

@@ -24,6 +24,14 @@ class LinearBoard():
         """
         self._column = [None for i in range(BOARD_LENGTH)]
         
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        else:
+            if self._column == other._column:
+                return True
+    
+        
     def add(self, token):
         """
         Juega en la primera posicion disponible

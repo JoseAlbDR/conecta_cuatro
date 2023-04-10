@@ -1,0 +1,7 @@
+from square_board import SquareBoard
+from oracle import BaseOracle
+from enum import Enum
+
+class ColumnRecomencation():
+    def __init__(self, classification):
+        self.classification = Enum()

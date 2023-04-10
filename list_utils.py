@@ -66,8 +66,10 @@ def any_element(matriz, n):
     Devuelve en una lista los elementos de la columna n
     """
     # Coge el elemento n de cada fila de la matriz y lo mete en una lista
-    elements = list(map(lambda element: element[n], matriz))
-    return elements
+    result = []
+    for list in matriz:
+        result.append(list[n])
+    return result
 
 def transpose(matriz):
     """
@@ -102,21 +104,18 @@ def displace(l, distance, filler=None):
     Devuelve una lista con los elementos desplazados por distancia y reelenando con filler
     """
     # Si la distancia es 0 o la lista esta vacia devuelve la lista
-    if distance == 0 or len(l) == 0:
+    if distance == 0:
         return l
-    # Si la distancia es positiva
     elif distance > 0:
-    # Movemos los items distance posiciones a la derecha y rellenamos con filler
-        return positive_displace(l, distance, filler)
+        filling = [filler] * distance
+        res = filling + l
+        res = res[:-distance]
+        return res
     else:
-        # Si el desplazamiento es negativo damos la vuelta a la lista
-        l.reverse()
-        # Aplicamos un despazamiento positivo
-        l = positive_displace(l, abs(distance), filler)
-        # Le volvemos a dar la vuelta
-        l.reverse()
-        # La devolvemos
-        return l
+        filling = [filler] * abs(distance)
+        res = l + filling
+        res = res[abs(distance):]
+        return res
         
 def displace_matrix(m, filler=None):
     # creamos una matriz vacia
@@ -128,7 +127,34 @@ def displace_matrix(m, filler=None):
     # devolvemos m
     return matrix
 
+def reverse_list(l):
+    """
+    Devuelve la lista invertida
+    """
+    return list(reversed(l))
+     
+def reverse_matrix(matrix):
+    """
+    Devuelve una matriz invertida
+    """
+    rm = []
+    for col in matrix:
+        rm.append(reverse_list(col))
+    return rm
 
+def all_same(l):
+    """
+    Devuelve True si todos los elementos de la lista son iguales
+    o la lista esta vacia
+    """
+    if l == []:
+        return True
+    else:
+        for i in l:
+            for j in l:
+                if i != j:
+                    return False
+            return True
 
 
 

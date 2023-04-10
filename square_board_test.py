@@ -52,3 +52,11 @@ def test_rising_victory():
     assert rising_victory.is_victory("x")
     assert rising_victory.is_victory("o") == False
 
+sinking_victory = SquareBoard.fromList([["x", "o", "x", "o",  ],
+                                           ["x", "x", "o", None,],
+                                           ["o", "o", None, None,],
+                                           ["o", "x", None, None,],
+                                           ["x", None, None, None,],])
+
+
+    
