@@ -5,7 +5,7 @@ from match import *
 from player import *
 from list_utils import *
 from beautifultable import BeautifulTable
-from oracle import SmartOracle, BaseOracle
+from oracle import SmartOracle, BaseOracle, MemoizingOracle
 
 class RoundType(Enum):
     COMPUTER_VS_COMPUTER = auto()
@@ -120,7 +120,6 @@ class Game:
                 level = DifficultyLevel.EASY
             if response == "2":
                 level = DifficultyLevel.NORMAL
-                print(DifficultyLevel.NORMAL)
             else:
                 level = DifficultyLevel.HARD
                 
@@ -157,8 +156,8 @@ class Game:
                    DifficultyLevel.HARD: SmartOracle()}
         
         if self.round_type == RoundType.COMPUTER_VS_COMPUTER:
-            player1 = Player("T-X", oracle=SmartOracle())
-            player2 = Player("T-1000", oracle=SmartOracle())
+            player1 = Player("T-X", oracle=MemoizingOracle())
+            player2 = Player("T-1000", oracle=MemoizingOracle())
         elif self.round_type == RoundType.COMPUTER_VS_HUMAN:
             player1 = Player("T-800", oracle=_levels[self._difficulty_level])
             player2 = HumanPlayer(name=input("Enter your name: "))

@@ -1,11 +1,32 @@
 from linear_board import *
 from list_utils import *
-
+from string_utils import *
 
 class SquareBoard():
     """
     Representa un tablero cuadrado
     """
+    
+    @classmethod
+    def fromBoardCode(cls, board_code):
+        #return cls.fromList(board_code.as_matrix())
+        return cls.fromBoardRawCode(board_code.raw_code)
+    
+    @classmethod
+    def fromBoardRawCode(cls, board_raw_code):
+        """
+        Transforma una cadena en formato de BoardCode en una
+        lista de LinearBoards y luego lo transforma en un tablero
+        """
+        # 1. Convertir la cadena del codigo en una lista de cadenas
+        string_list = board_raw_code.split("|")
+        # 2. Transformar cada cadena en una lista de caracteres
+        char_list = explode_string_list(string_list)
+        # 3. Cambiamos todas las ocurrencias de . por None
+        matrix = replace_all_in_matrix(char_list, ".", None)
+        # 4. Transformamos esa lista en un SquareBoard
+        return cls.fromList(matrix)
+    
     @classmethod
     def fromList(cls, list_of_lists):
         """
@@ -20,8 +41,7 @@ class SquareBoard():
            
     def __init__(self):
         self._columns = [LinearBoard() for i in range(BOARD_LENGTH)]
-        
-        
+          
     def __repr__(self):
         return f"{self.__class__}: {self._columns}"
     
@@ -48,6 +68,9 @@ class SquareBoard():
             result = result and lb.is_full()
         # Devolvemos result
         return result
+    
+    def as_code(self):
+        return BoardCode(self)
     
     def as_matrix(self):
         """
@@ -112,10 +135,44 @@ class SquareBoard():
         # Averiguamos si tiene una victoria horizontal
         return temp._any_horizontal_victory(char)
             
-
     # dunders
     def __repr__(self) -> str:
         return f"{self.__class__}:{self._columns}"
    
-
+class BoardCode:
+    def __init__(self, board):
+        self._raw_code = collapse_matrix(board.as_matrix())
+    
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        else:
+            return self.raw_code == other.raw_code
+    
+    def __hash__(self) -> int:
+        return hash(self.raw_code)
+    
+    def __repr__(self) -> str:
+        return f"{self.__class__}: {self.raw_code}"
+        
+    @property
+    def raw_code(self):
+        return self._raw_code
+    
+    @DeprecationWarning
+    def as_matrix(self):
+        matrix = []
+        column = []
+        for char in self.raw_code:
+            if char == "|":
+                matrix.append(column)
+                column = []
+            else:
+                if char == ".":
+                    column.append(None)
+                else:
+                    column += char
+        matrix.append(column)
+        return matrix
+                
 

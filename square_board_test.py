@@ -52,11 +52,17 @@ def test_rising_victory():
     assert rising_victory.is_victory("x")
     assert rising_victory.is_victory("o") == False
 
-sinking_victory = SquareBoard.fromList([["x", "o", "x", "o",  ],
-                                           ["x", "x", "o", None,],
-                                           ["o", "o", None, None,],
-                                           ["o", "x", None, None,],
-                                           ["x", None, None, None,],])
+def test_board_code():
+    board = SquareBoard.fromList([["x", "o", None, None],
+                                  ["o", "x", None, None],
+                                  ["x", "o", "x", "o"],
+                                  ["x", "x", "o", None]])
+    
+    code = board.as_code()
 
-
+    clone_board = SquareBoard.fromBoardCode(code)
+    
+    assert clone_board == board
+    assert clone_board.as_code() == code
+    assert clone_board.as_code().raw_code == code.raw_code
     

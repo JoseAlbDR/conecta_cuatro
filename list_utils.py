@@ -1,3 +1,5 @@
+from settings import *
+
 def find_one(list, needle):
     """
     Devuelve True si encuentra una o más ocurrencias de needle en list
@@ -155,6 +157,52 @@ def all_same(l):
                 if i != j:
                     return False
             return True
+
+def collapse_list(l, empty = "."):
+    # Variable que contiene la lista colapsada
+    colapsed_list = ""
+    # Si la lista es vacia devolvemos la lista colapsada vacia
+    if l == []:
+        return colapsed_list
+    # Si no esta vacia
+    else:
+        # Por cada elemento de la lista
+        for elem in l:
+            # Si el elemento es None lo sustituimos por "."
+            if elem == None:
+                colapsed_list += empty
+            # Si no lo es añadimos el elemento
+            else:
+                colapsed_list += elem
+    return colapsed_list
+
+
+def collapse_matrix(matrix, fence = "|"):
+    # Creamos la variable que va a contener la matriz colapsada
+    collapsed_matrix = ""
+    # Recorremos las columnas de la matriz
+    #return [fence + collapse_list(matrix[column]) if column != 0 and column != len(matrix) else collapse_list(matrix[column]) for column in range(0, len(matrix))]
+    for column in range(0, len(matrix)):
+    # Por cada columna la colapsamos y la añadimos a la matriz colapsada
+        if column != 0 and column != len(matrix):
+            collapsed_matrix += fence + collapse_list(matrix[column])
+        else:
+            collapsed_matrix += collapse_list(matrix[column])
+    # Devolvemos la matriz colapsada
+    return collapsed_matrix
+
+
+def replace_all_in_list(l, old, new):
+    """
+    Cambia todas las ocurrencias de old por new
+    """
+    return [new if element == old else element for element in l]
+
+def replace_all_in_matrix(matrix, old, new):
+    """
+    Aplica replace_all_in_list a todas las listas
+    """
+    return [replace_all_in_list(column, old, new) for column in matrix]
 
 
 
