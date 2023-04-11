@@ -29,17 +29,17 @@ def test_is_game_over():
                                        [None, None, None, None]])
     
     game.board = win_x
-    assert game._is_game_over() == True
+    assert game._has_winner_or_tie() == True
     
     game.board = win_o
-    assert game._is_game_over() == True
+    assert game._has_winner_or_tie() == True
     
     game.board = tie
     assert game.board.is_full() == True
-    assert game._is_game_over() == True
+    assert game._has_winner_or_tie() == True
     
     game.board = unfinished
-    assert game._is_game_over() == False
+    assert game._has_winner_or_tie() == False
     
 game = Game()   
 tie = SquareBoard.fromList([["o", "x", "x", "o"],

@@ -5,7 +5,7 @@ from match import *
 from player import *
 from list_utils import *
 from beautifultable import BeautifulTable
-from oracle import SmartOracle, BaseOracle, MemoizingOracle
+from oracle import SmartOracle, BaseOracle, MemoizingOracle, LearningOracle
 
 class RoundType(Enum):
     COMPUTER_VS_COMPUTER = auto()
@@ -43,20 +43,24 @@ class Game:
             # le hago jugar
             current_player.play(self.board)
             # muestro su jugada
-            self.display_move(current_player) #implementar
+            self._display_move(current_player) #implementar
             # imprimo el tablero
-            self.display_board() #implementar
+            self._display_board() #implementar
             # si el jugeo ha terminado...
-            if self._is_game_over():
+            if self._has_winner_or_tie():
                 # mostrar el resultado final
                 self.display_result()
+                if self.match.is_match_over():
+                    break
                 # salgo del bucle
-                break
+                else:
+                    self.board = SquareBoard()
+                    self._display_board()
 
-    def display_move(self, player):
-        print(f"\n{player.name}({player.char}) has moved in column {player.last_move}")
+    def _display_move(self, player):
+        print(f"\n{player.name}({player.char}) has moved in column {player.moves_stack[0].position}")
     
-    def display_board(self):
+    def _display_board(self):
         """
         Imprimir el tablero en su estado actual
         """# obtenemos una matriz de caracteres a partir del tablero
@@ -78,16 +82,21 @@ class Game:
         else:
             print(f"\nA tie between {self.match.get_player('x').name} and {self.match.get_player('o').name}")
         
-    def _is_game_over(self):
+    def _has_winner_or_tie(self):
         """
         El juego se acaba cuando hay vencedor o empate
         """
         winner = self.match.get_winner(self.board)
-        if winner != None:
+        if winner != None:         # Alguien ha ganado
+            winner.opponent.on_lose()
             return True
-        elif self.board.is_full():
+        elif self.board.is_full(): # Empate
+            # obtengo los players y los mando a aprender
+            players = self.match.current_players()
+            players["x"].on_lose()
+            players["o"].on_lose()
             return True
-        else:
+        else:                      # Sigue el juego
             return False
             
     def _configure_by_user(self):
@@ -118,11 +127,10 @@ class Game:
             response = input("Please type either 1 or 2 or 3: ").strip()
             if response == "1":
                 level = DifficultyLevel.EASY
-            if response == "2":
+            elif response == "2":
                 level = DifficultyLevel.NORMAL
             else:
                 level = DifficultyLevel.HARD
-                
         return level
         
         
@@ -153,17 +161,21 @@ class Game:
         
         _levels = {DifficultyLevel.EASY: BaseOracle(),
                    DifficultyLevel.NORMAL: SmartOracle(),
-                   DifficultyLevel.HARD: SmartOracle()}
+                   DifficultyLevel.HARD: LearningOracle()}
+        
+        _names = {DifficultyLevel.EASY: "Bender",
+                  DifficultyLevel.NORMAL: "T-1000",
+                  DifficultyLevel.HARD: "Skynet"}
         
         if self.round_type == RoundType.COMPUTER_VS_COMPUTER:
-            player1 = Player("T-X", oracle=MemoizingOracle())
-            player2 = Player("T-1000", oracle=MemoizingOracle())
+            player1 = ReportingPlayer("Skynet", oracle=SmartOracle())
+            player2 = ReportingPlayer("ChatGPT", oracle=LearningOracle())
         elif self.round_type == RoundType.COMPUTER_VS_HUMAN:
-            player1 = Player("T-800", oracle=_levels[self._difficulty_level])
+            player1 = ReportingPlayer(name=_names[self._difficulty_level], oracle=_levels[self._difficulty_level])
             player2 = HumanPlayer(name=input("Enter your name: "))
         else:
-            player1 = HumanPlayer(name=input("Enter your name: "))
-            player2 = HumanPlayer(name=input("Enter your name: "))
+            player1 = HumanPlayer(name=input("1) Enter your name: "))
+            player2 = HumanPlayer(name=input("2) Enter your name: "))
             
         return Match(player1, player2)
             

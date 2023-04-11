@@ -30,7 +30,7 @@ def find_n(list, needle, times):
     # Devolvemos el resultado igualado a times
     return acum == times
 
-def find_streak(list, needle, times): 
+def find_streak(l, needle, times): 
     """
     Devuelve True si en list hay times o mas ocurrencias de needle seguidas
     False si hay menos o si n < 0
@@ -43,9 +43,9 @@ def find_streak(list, needle, times):
     acum = 0
     index = 0
     # Mientras no hayamos encontrado al elemento n veces seguidas o no hayamos terminado la lista
-    while acum < times and index < len(list):
+    while acum < times and index < len(l):
         # SI lo encontramos, aumentamos en uno el acumulador de coincidencias
-        if list[index] == needle:
+        if l[index] == needle:
             acum += 1
         # Si no encontramos el elemento ponemos el acumulador de coincidencias a 0, y rompemos la racha siempre que acum sea < que times
         else:
@@ -69,8 +69,8 @@ def any_element(matriz, n):
     """
     # Coge el elemento n de cada fila de la matriz y lo mete en una lista
     result = []
-    for list in matriz:
-        result.append(list[n])
+    for l in matriz:
+        result.append(l[n])
     return result
 
 def transpose(matriz):

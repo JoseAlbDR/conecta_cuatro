@@ -30,7 +30,24 @@ class Match:
             return self.get_player("o")
         else:
             return None
-
-    
-    
         
+    def current_players(self):
+        players = {}
+        players["x"] = self.get_player("x")
+        players["o"] = self.get_player("o")
+        return players    
+    
+    def is_match_over(self):
+        """
+        Pregunta al usuario si hay huevos a echar otra partida
+        """
+        answer = ""
+        while answer != "y" or answer != "n":
+            answer = input("Would you like to play another match? (Y/N): ").lower()
+            if answer == "y":
+                return False
+            elif answer == "n":
+                return True
+        
+    def is_match_over_(self):
+        return False
