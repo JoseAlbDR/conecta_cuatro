@@ -39,4 +39,30 @@ def test_add_to_full():
         full.add("x")
     full.add("x")
     assert full.is_full()
+    
+def test_equals():
+    l = LinearBoard.fromList([1, 2, 3, 4])
+    p = []
+    
+    assert l == l
+    assert l == LinearBoard.fromList([1, 2, 3, 4])
+    
+    assert l != LinearBoard.fromList(p)
+    assert l != LinearBoard.fromList([2, 3, 4, 5])
+    assert l != LinearBoard.fromList([1, 2, 3])
+    
+
+    
+""" def test_hash():
+    l = LinearBoard.fromList([1, 2, 3, 4])
+    p = []
+    
+    assert hash(l) == hash(LinearBoard.fromList(l))
+    assert hash(l) == hash(LinearBoard.fromList([1, 2, 3, 4]))
+    
+    assert hash(l) != hash(LinearBoard.fromList(p))
+    assert hash(l) != hash(LinearBoard.fromList([2, 3, 4, 5]))
+    assert hash(l) != hash(LinearBoard.fromList([1, 2, 3])) """
+    
+        
         
